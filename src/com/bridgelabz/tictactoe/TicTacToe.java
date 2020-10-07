@@ -1,14 +1,17 @@
 package com.bridgelabz.tictactoe;
+
 import java.util.*;
 
 public class TicTacToe {
-	private static char[] board = new char[10];	
-	//UC1
+	private static char[] board = new char[10];
+
+	// UC1
 	public void assignEmptySpaceToBoard() {
-		for(int position=0;position<10;position++)
+		for (int position = 0; position < 10; position++)
 			board[position] = ' ';
 	}
-	//UC2
+
+	// UC2
 	public char chooseXOrO() {
 		System.out.println("Choose the letter X or O");
 		Scanner sc = new Scanner(System.in);
@@ -16,28 +19,30 @@ public class TicTacToe {
 		sc.close();
 		return option;
 	}
-	
-	//UC3
+
+	// UC3
 	public void showBoard() {
-		for(int rowPositon=1;rowPositon<10;rowPositon++) {
-			for(int columnPositon=1;columnPositon<=3;columnPositon++) {
-				System.out.print(board[columnPositon]+" ");
+		for (int rowPositon = 1; rowPositon <= 3; rowPositon++) {
+			for (int columnPositon = 1; columnPositon <= 3; columnPositon++) {
+				System.out.print(board[columnPositon]);
+				if (columnPositon != 3)
+					System.out.print(" | ");
 			}
+			if (rowPositon != 3)
+				System.out.println("\n_________\n");
 		}
 	}
-	
-	
+
 	public static void main(String[] args) {
 		System.out.println("Welcome to Tic Tac Toe Game");
 		TicTacToe ticTacToe = new TicTacToe();
 		ticTacToe.assignEmptySpaceToBoard();
 		char userInput = ticTacToe.chooseXOrO();
 		char computerInput;
-		if((userInput == 'X'))
+		if ((userInput == 'X'))
 			computerInput = 'O';
 		else
 			computerInput = 'X';
-		
 		ticTacToe.showBoard();
 	}
 }
