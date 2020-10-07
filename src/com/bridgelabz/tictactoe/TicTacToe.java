@@ -45,7 +45,7 @@ public class TicTacToe {
 
 	// UC4
 	public void userMove(Scanner input) {
-		System.out.println("\nEnter the position where you want to put a letter");
+		System.out.println("Enter the position where you want to put a letter");
 		int position = input.nextInt();
 		if (position < 1 || position > 9)
 			System.out.println("This is wrong position.");
@@ -58,16 +58,17 @@ public class TicTacToe {
 	}
 
 	// UC5
-	public void checkFreeSpace(Scanner input) {
-		while (true) {
-			for (int position = 0; position < 10; position++) {
-				if (board[position] == ' ') {
-					userMove(input);
-					showBoard();
-				}
+	public List<Integer> checkFreeSpace() {
+		List<Integer> freeIndexList = new ArrayList<>();
+		for (int position = 0; position < 10; position++) {
+			if (board[position] == ' ') {
+				freeIndexList.add(position);
 			}
 		}
+		return freeIndexList;
 	}
+	
+	
 
 	// UC6
 	public void tossToDecidePlayer() {
@@ -85,15 +86,12 @@ public class TicTacToe {
 	public static void main(String[] args) {
 		System.out.println("Welcome to Tic Tac Toe Game");
 		TicTacToe ticTacToe = new TicTacToe();
+		ticTacToe.tossToDecidePlayer();
 		ticTacToe.assignEmptySpaceToBoard();
 		Scanner input = new Scanner(System.in);
-		char userInput = ticTacToe.chooseSymbol(input);
-		char computerInput = (userInput == 'X') ? 'O' : 'X';
-		System.out.println("User Input :" + userInput);
-		System.out.println("Computer Input :" + computerInput);
-		ticTacToe.tossToDecidePlayer();
 		ticTacToe.userMove(input);
 		ticTacToe.showBoard();
-		ticTacToe.checkFreeSpace(input);
+		System.out.println("");
+		System.out.println("The free index(es) are: "+ticTacToe.checkFreeSpace());
 	}
 }
