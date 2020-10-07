@@ -53,13 +53,15 @@ public class TicTacToe {
 			System.out.println("User can't move to the position: " + position);
 		}
 	}
-	
-	//UC5
+
+	// UC5
 	public void checkFreeSpace(Scanner input) {
-		for (int position = 0; position < 10; position++) {
-			if (board[position] == ' ') {
-				userMove(input);
-				showBoard();
+		while (true) {
+			for (int position = 0; position < 10; position++) {
+				if (board[position] == ' ') {
+					userMove(input);
+					showBoard();
+				}
 			}
 		}
 	}
