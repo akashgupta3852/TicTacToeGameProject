@@ -12,11 +12,9 @@ public class TicTacToe {
 	}
 
 	// UC2
-	public char chooseXOrO() {
+	public char chooseXOrO(Scanner input) {
 		System.out.println("Choose the letter X or O");
-		Scanner sc = new Scanner(System.in);
-		char option = sc.next().charAt(0);
-		sc.close();
+		char option = input.next().charAt(0);
 		return option;
 	}
 
@@ -33,16 +31,29 @@ public class TicTacToe {
 		}
 	}
 
+	// UC4
+	public void userMove(Scanner input) {
+		System.out.println("\nEnter the position where you want to put a letter");
+		int position = input.nextInt();
+		if (board[position] == ' ') {
+			System.out.println("Enter the letter which you want to put");
+			char option = input.next().charAt(0);
+			board[position] = option;
+		} else {
+			System.out.println("User can't move to the " + position);
+		}
+	}
+
 	public static void main(String[] args) {
 		System.out.println("Welcome to Tic Tac Toe Game");
 		TicTacToe ticTacToe = new TicTacToe();
 		ticTacToe.assignEmptySpaceToBoard();
-		char userInput = ticTacToe.chooseXOrO();
-		char computerInput;
-		if ((userInput == 'X'))
-			computerInput = 'O';
-		else
-			computerInput = 'X';
+		Scanner input = new Scanner(System.in);
+		char userInput = ticTacToe.chooseXOrO(input);
+		char computerInput = (userInput == 'X') ? 'O' : 'X';
+		System.out.println("User Input :" + userInput);
+		System.out.println("Computer Input :" + computerInput);
 		ticTacToe.showBoard();
+		ticTacToe.userMove(input);
 	}
 }
