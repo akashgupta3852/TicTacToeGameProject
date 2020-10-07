@@ -44,13 +44,23 @@ public class TicTacToe {
 
 	// UC4
 	public void userMove(Scanner input) {
-		System.out.println("Enter the position where you want to put a letter");
+		System.out.println("\nEnter the position where you want to put a letter");
 		int position = input.nextInt();
 		if (board[position] == ' ') {
 			char option = chooseXOrO(input);
 			board[position] = option;
 		} else {
-			System.out.println("User can't move to the " + position);
+			System.out.println("User can't move to the position: " + position);
+		}
+	}
+	
+	//UC5
+	public void checkFreeSpace(Scanner input) {
+		for (int position = 0; position < 10; position++) {
+			if (board[position] == ' ') {
+				userMove(input);
+				showBoard();
+			}
 		}
 	}
 
@@ -65,5 +75,6 @@ public class TicTacToe {
 		System.out.println("Computer Input :" + computerInput);
 		ticTacToe.userMove(input);
 		ticTacToe.showBoard();
+		ticTacToe.checkFreeSpace(input);
 	}
 }
