@@ -13,31 +13,41 @@ public class TicTacToe {
 
 	// UC2
 	public char chooseXOrO(Scanner input) {
-		System.out.println("Choose the letter X or O");
-		char option = input.next().charAt(0);
-		return option;
+		while (true) {
+			System.out.println("Choose the letter X or O");
+			char option = input.next().charAt(0);
+			if (option == 'X' || option == 'O')
+				return option;
+			else {
+				System.out.println("Sorry, the option: " + option + " is not available.");
+				continue;
+			}
+		}
 	}
 
 	// UC3
 	public void showBoard() {
-		for (int rowPositon = 1; rowPositon <= 3; rowPositon++) {
-			for (int columnPositon = 1; columnPositon <= 3; columnPositon++) {
+		for (int rowPositon = 1; rowPositon < 10; rowPositon = rowPositon + 3) {
+			for (int columnPositon = rowPositon; columnPositon <= rowPositon + 2; columnPositon++) {
 				System.out.print(board[columnPositon]);
-				if (columnPositon != 3)
+				if (columnPositon != rowPositon + 2)
 					System.out.print(" | ");
+				if (columnPositon == 9)
+					rowPositon = 0;
 			}
-			if (rowPositon != 3)
+			if (rowPositon == 0)
+				break;
+			if (rowPositon != rowPositon + 2)
 				System.out.println("\n_________\n");
 		}
 	}
 
 	// UC4
 	public void userMove(Scanner input) {
-		System.out.println("\nEnter the position where you want to put a letter");
+		System.out.println("Enter the position where you want to put a letter");
 		int position = input.nextInt();
 		if (board[position] == ' ') {
-			System.out.println("Enter the letter which you want to put");
-			char option = input.next().charAt(0);
+			char option = chooseXOrO(input);
 			board[position] = option;
 		} else {
 			System.out.println("User can't move to the " + position);
@@ -53,7 +63,7 @@ public class TicTacToe {
 		char computerInput = (userInput == 'X') ? 'O' : 'X';
 		System.out.println("User Input :" + userInput);
 		System.out.println("Computer Input :" + computerInput);
-		ticTacToe.showBoard();
 		ticTacToe.userMove(input);
+		ticTacToe.showBoard();
 	}
 }
