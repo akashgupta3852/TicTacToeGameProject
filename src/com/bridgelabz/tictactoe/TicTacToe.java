@@ -3,16 +3,17 @@ package com.bridgelabz.tictactoe;
 import java.util.*;
 
 public class TicTacToe {
+	private final static int USER = 0, COMPUTER = 1;
 	private static char[] board = new char[10];
 
 	// UC1
 	public void assignEmptySpaceToBoard() {
-		for (int position = 0; position < 10; position++)
+		for (int position = 1; position < 10; position++)
 			board[position] = ' ';
 	}
 
 	// UC2
-	public char chooseXOrO(Scanner input) {
+	public char chooseSymbol(Scanner input) {
 		while (true) {
 			System.out.println("Choose the letter X or O");
 			char option = input.next().charAt(0);
@@ -46,8 +47,10 @@ public class TicTacToe {
 	public void userMove(Scanner input) {
 		System.out.println("\nEnter the position where you want to put a letter");
 		int position = input.nextInt();
-		if (board[position] == ' ') {
-			char option = chooseXOrO(input);
+		if (position < 1 || position > 9)
+			System.out.println("This is wrong position.");
+		else if (board[position] == ' ') {
+			char option = chooseSymbol(input);
 			board[position] = option;
 		} else {
 			System.out.println("User can't move to the position: " + position);
@@ -66,15 +69,29 @@ public class TicTacToe {
 		}
 	}
 
+	// UC6
+	public void tossToDecidePlayer() {
+		int check=(int)Math.floor(Math.random()*10)%2;
+		switch(check) {
+		case USER:
+			System.out.println("User is playing now");
+			break;
+		case COMPUTER:
+			System.out.println("Computer is playing now");
+			break;
+		}
+	}
+
 	public static void main(String[] args) {
 		System.out.println("Welcome to Tic Tac Toe Game");
 		TicTacToe ticTacToe = new TicTacToe();
 		ticTacToe.assignEmptySpaceToBoard();
 		Scanner input = new Scanner(System.in);
-		char userInput = ticTacToe.chooseXOrO(input);
+		char userInput = ticTacToe.chooseSymbol(input);
 		char computerInput = (userInput == 'X') ? 'O' : 'X';
 		System.out.println("User Input :" + userInput);
 		System.out.println("Computer Input :" + computerInput);
+		ticTacToe.tossToDecidePlayer();
 		ticTacToe.userMove(input);
 		ticTacToe.showBoard();
 		ticTacToe.checkFreeSpace(input);
