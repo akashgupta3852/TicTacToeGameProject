@@ -45,7 +45,7 @@ public class TicTacToe {
 
 	// UC4
 	public void userMove(Scanner input) {
-		System.out.println("Enter the position where you want to put a letter");
+		System.out.println("\nEnter the position where you want to put a letter");
 		int position = input.nextInt();
 		if (position < 1 || position > 9)
 			System.out.println("This is wrong position.");
@@ -58,14 +58,14 @@ public class TicTacToe {
 	}
 
 	// UC5
-	public List<Integer> checkFreeSpace() {
-		List<Integer> freeIndexList = new ArrayList<>();
+	public void checkFreeSpace(Scanner input) {
 		for (int position = 0; position < 10; position++) {
 			if (board[position] == ' ') {
-				freeIndexList.add(position);
+				userMove(input);
+				showBoard();
+				break;
 			}
 		}
-		return freeIndexList;
 	}
 	
 	
@@ -91,7 +91,6 @@ public class TicTacToe {
 		Scanner input = new Scanner(System.in);
 		ticTacToe.userMove(input);
 		ticTacToe.showBoard();
-		System.out.println("");
-		System.out.println("The free index(es) are: "+ticTacToe.checkFreeSpace());
+		ticTacToe.checkFreeSpace(input);
 	}
 }
