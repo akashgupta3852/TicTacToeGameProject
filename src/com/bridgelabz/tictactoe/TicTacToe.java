@@ -3,8 +3,9 @@ package com.bridgelabz.tictactoe;
 import java.util.*;
 
 public class TicTacToe {
-	private final static int USER = 0, COMPUTER = 1;
+	private final static int HEAD = 0, TAIL = 1;
 	private static char[] board = new char[10];
+	private static String player;
 
 	// UC1
 	public void assignEmptySpaceToBoard() {
@@ -17,9 +18,13 @@ public class TicTacToe {
 		while (true) {
 			System.out.println("Choose the letter X or O");
 			char option = input.next().charAt(0);
-			if (option == 'X' || option == 'O')
-				return option;
-			else {
+			if (option == 'X') {
+				System.out.println("User = X");
+				return 'O';
+			} else if (option == 'O') {
+				System.out.println("User = O");
+				return 'X';
+			} else {
 				System.out.println("Sorry, the option: " + option + " is not available.");
 				continue;
 			}
@@ -36,21 +41,22 @@ public class TicTacToe {
 				if (columnPositon == 9)
 					rowPositon = 0;
 			}
-			if (rowPositon == 0)
+			if (rowPositon == 0) {
+				System.out.print("\n");
 				break;
+			}
 			if (rowPositon != rowPositon + 2)
 				System.out.println("\n_________\n");
 		}
 	}
 
 	// UC4
-	public void userMove(Scanner input) {
-		System.out.println("\nEnter the position where you want to put a letter");
+	public void userMove(Scanner input, char option) {
+		System.out.println("Enter the position where you want to put a letter:");
 		int position = input.nextInt();
 		if (position < 1 || position > 9)
 			System.out.println("This is wrong position.");
 		else if (board[position] == ' ') {
-			char option = chooseSymbol(input);
 			board[position] = option;
 		} else {
 			System.out.println("User can't move to the position: " + position);
@@ -58,39 +64,64 @@ public class TicTacToe {
 	}
 
 	// UC5
-	public void checkFreeSpace(Scanner input) {
+	public void checkFreeSpace(Scanner input, char option) {
 		for (int position = 0; position < 10; position++) {
 			if (board[position] == ' ') {
-				userMove(input);
+				if (option == 'X')
+					option = 'O';
+				else
+					option = 'X';
+				userMove(input, option);
 				showBoard();
-				break;
+				if (isWinner(option)) {
+					System.out.println(option + " is winner");
+					break;
+				}
+				position = 0;
 			}
 		}
+		System.out.println("Tie: no one won");
 	}
-	
-	
 
 	// UC6
-	public void tossToDecidePlayer() {
-		int check=(int)Math.floor(Math.random()*10)%2;
-		switch(check) {
-		case USER:
-			System.out.println("User is playing now");
+	public int tossToDecideFirstPlayer() {
+		int toss = (int) Math.floor(Math.random() * 10) % 2;
+		switch (toss) {
+		case HEAD:
+			System.out.println("User is playing first.");
 			break;
-		case COMPUTER:
-			System.out.println("Computer is playing now");
-			break;
+		case TAIL:
+			System.out.println("Computer is playing first.");
+			return TAIL;
 		}
+		return HEAD;
+	}
+
+	// UC7
+	public boolean isWinner(char option) {
+		return (board[1] == board[2] && board[2] == board[3] && board[3] == option
+				|| board[4] == board[5] && board[5] == board[6] && board[6] == option
+				|| board[7] == board[8] && board[8] == board[9] && board[9] == option
+				|| board[1] == board[5] && board[5] == board[9] && board[9] == option
+				|| board[3] == board[5] && board[5] == board[7] && board[7] == option
+				|| board[1] == board[4] && board[4] == board[7] && board[7] == option
+				|| board[2] == board[5] && board[5] == board[8] && board[8] == option
+				|| board[3] == board[6] && board[6] == board[9] && board[9] == option);
 	}
 
 	public static void main(String[] args) {
 		System.out.println("Welcome to Tic Tac Toe Game");
 		TicTacToe ticTacToe = new TicTacToe();
-		ticTacToe.tossToDecidePlayer();
 		ticTacToe.assignEmptySpaceToBoard();
+		int toss = ticTacToe.tossToDecideFirstPlayer();
+		if (toss == HEAD)
+			player = "User";
+		else
+			player = "Computer";
+
 		Scanner input = new Scanner(System.in);
-		ticTacToe.userMove(input);
+		char option = ticTacToe.chooseSymbol(input);
 		ticTacToe.showBoard();
-		ticTacToe.checkFreeSpace(input);
+		ticTacToe.checkFreeSpace(input, option);
 	}
 }
