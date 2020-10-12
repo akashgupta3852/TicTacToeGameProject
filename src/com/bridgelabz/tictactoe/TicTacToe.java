@@ -56,14 +56,13 @@ public class TicTacToe {
 	// UC4 - Entering position where user can move
 	public void userMove(Scanner input, char option) {
 		while (true) {
-			System.out.println("Enter the position where you want to put a letter:");
+			System.out.println("Enter the position where you want to move:");
 			int position = input.nextInt();
 			if (position < 1 || position > 9) {
 				System.out.println("This is wrong position.");
 				continue;
 			} else if (board[position] == ' ') {
 				board[position] = option;
-
 				break;
 			} else {
 				System.out.println("User can't move to the position: " + position);
@@ -85,6 +84,10 @@ public class TicTacToe {
 						System.out.println("User is winner");
 						break;
 					}
+					if(isGameOver()) {
+						System.out.println("Game is over.");
+						break;
+					}				
 				}
 				if (player.equals("Computer")) {
 					if (computerMove(option))
@@ -93,7 +96,6 @@ public class TicTacToe {
 						showBoard();
 						player = "User";
 					}
-
 				}
 				position = 1;
 			}
@@ -140,8 +142,13 @@ public class TicTacToe {
 						System.out.println("Computer is winner");
 						return true;
 					}
+					if(isGameOver()){
+						System.out.println("Game is over.");
+						return true;
+					}
 				}
-			} else {
+			} 
+			else {
 				computerPosition = moveCentre();
 				if(computerPosition!=5) 
 					board[computerPosition] = option;
@@ -162,6 +169,11 @@ public class TicTacToe {
 					System.out.println("Computer is winner");
 					return true;
 				}
+				else if(isGameOver()) {
+					showBoard();
+					System.out.println("Game is over.");
+					return true;
+				}				
 			}
 			return false;
 		}
@@ -210,11 +222,18 @@ public class TicTacToe {
 	}
 
 	// UC11 - Moving to the centre position if corners are not available
-		public int moveCentre() {
-			if(moveCorner() != 0)
-				return moveCorner();
-			return 5;
-		}
+	public int moveCentre() {
+		if(moveCorner() != 0)
+			return moveCorner();
+		return 5;
+	}	
+	
+	public boolean isGameOver() {
+		for (int position = 1; position < 10; position++)
+			if(board[position] == ' ')
+				return false;
+		return true;
+	}
 	
 	public static void main(String[] args) {
 		System.out.println("Welcome to Tic Tac Toe Game");
