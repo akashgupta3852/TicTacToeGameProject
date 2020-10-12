@@ -142,12 +142,18 @@ public class TicTacToe {
 					}
 				}
 			} else {
-				computerPosition = (int) Math.floor(Math.random() * 10) % 9 + 1;
-				if (board[computerPosition] == ' ')
+				computerPosition = moveCorner();
+				if(computerPosition!=0) {
 					board[computerPosition] = option;
+				}	
 				else {
-					option = (option == 'X') ? 'O' : 'X';
-					continue;
+					computerPosition = (int) Math.floor(Math.random() * 10) % 9 + 1;
+					if (board[computerPosition] == ' ')
+						board[computerPosition] = option;
+					else {
+						option = (option == 'X') ? 'O' : 'X';
+						continue;
+					}
 				}
 				System.out.println("Computer moved at the random position: " + computerPosition);
 				if (isWinner(option)) {
@@ -186,6 +192,19 @@ public class TicTacToe {
 		else if (board[3] == board[6] && board[3] == option && board[9] ==' ')	return 9;
 		else if (board[6] == board[9] && board[6] == option && board[3] ==' ')	return 3;
 		else if (board[3] == board[9] && board[3] == option && board[6] ==' ') return 6;
+		return 0;
+	}
+	
+	// UC10 - Moving to the corner position if available
+	public int moveCorner() {
+		if(board[1] == ' ')
+			return 1;
+		else if(board[3] == ' ')
+			return 3;
+		else if(board[7] == ' ')
+			return 7;
+		else if(board[9] == ' ')
+			return 9;
 		return 0;
 	}
 
