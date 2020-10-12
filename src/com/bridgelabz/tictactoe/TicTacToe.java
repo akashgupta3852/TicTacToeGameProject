@@ -134,7 +134,7 @@ public class TicTacToe {
 			if (computerPosition != 0) {
 				if (board[computerPosition] == ' ') {
 					board[computerPosition] = option;
-					System.out.println("Computer moved at the position: " + computerPosition + " to block the user");
+					System.out.println("Computer moved at the position: " + computerPosition);
 					if (isWinner(option)) {
 						showBoard();
 						System.out.println("Computer is winner");
@@ -142,10 +142,11 @@ public class TicTacToe {
 					}
 				}
 			} else {
-				computerPosition = moveCorner();
-				if(computerPosition!=0) {
+				computerPosition = moveCentre();
+				if(computerPosition!=5) 
 					board[computerPosition] = option;
-				}	
+				else if(computerPosition == 5)
+					board[computerPosition] = option;
 				else {
 					computerPosition = (int) Math.floor(Math.random() * 10) % 9 + 1;
 					if (board[computerPosition] == ' ')
@@ -155,7 +156,7 @@ public class TicTacToe {
 						continue;
 					}
 				}
-				System.out.println("Computer moved at the random position: " + computerPosition);
+				System.out.println("Computer moved at the position: " + computerPosition);
 				if (isWinner(option)) {
 					showBoard();
 					System.out.println("Computer is winner");
@@ -208,6 +209,13 @@ public class TicTacToe {
 		return 0;
 	}
 
+	// UC11 - Moving to the centre position if corners are not available
+		public int moveCentre() {
+			if(moveCorner() != 0)
+				return moveCorner();
+			return 5;
+		}
+	
 	public static void main(String[] args) {
 		System.out.println("Welcome to Tic Tac Toe Game");
 		TicTacToe ticTacToe = new TicTacToe();
