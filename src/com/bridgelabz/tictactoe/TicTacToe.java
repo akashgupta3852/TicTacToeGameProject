@@ -84,10 +84,10 @@ public class TicTacToe {
 						System.out.println("User is winner");
 						break;
 					}
-					if(isGameOver()) {
+					if (isGameOver()) {
 						System.out.println("Game is over.");
 						break;
-					}				
+					}
 				}
 				if (player.equals("Computer")) {
 					if (computerMove(option))
@@ -142,17 +142,16 @@ public class TicTacToe {
 						System.out.println("Computer is winner");
 						return true;
 					}
-					if(isGameOver()){
+					if (isGameOver()) {
 						System.out.println("Game is over.");
 						return true;
 					}
 				}
-			} 
-			else {
+			} else {
 				computerPosition = moveCentre();
-				if(computerPosition!=5) 
+				if (computerPosition != 5)
 					board[computerPosition] = option;
-				else if(computerPosition == 5)
+				else if (computerPosition == 5)
 					board[computerPosition] = option;
 				else {
 					computerPosition = (int) Math.floor(Math.random() * 10) % 9 + 1;
@@ -168,12 +167,11 @@ public class TicTacToe {
 					showBoard();
 					System.out.println("Computer is winner");
 					return true;
-				}
-				else if(isGameOver()) {
+				} else if (isGameOver()) {
 					showBoard();
 					System.out.println("Game is over.");
 					return true;
-				}				
+				}
 			}
 			return false;
 		}
@@ -207,34 +205,55 @@ public class TicTacToe {
 		else if (board[3] == board[9] && board[3] == option && board[6] ==' ') return 6;
 		return 0;
 	}
-	
+
 	// UC10 - Moving to the corner position if available
 	public int moveCorner() {
-		if(board[1] == ' ')
+		if (board[1] == ' ')
 			return 1;
-		else if(board[3] == ' ')
+		else if (board[3] == ' ')
 			return 3;
-		else if(board[7] == ' ')
+		else if (board[7] == ' ')
 			return 7;
-		else if(board[9] == ' ')
+		else if (board[9] == ' ')
 			return 9;
 		return 0;
 	}
 
 	// UC11 - Moving to the centre position if corners are not available
 	public int moveCentre() {
-		if(moveCorner() != 0)
+		if (moveCorner() != 0)
 			return moveCorner();
 		return 5;
-	}	
-	
+	}
+
+	// UC12 - Checking whether game is over or not
 	public boolean isGameOver() {
 		for (int position = 1; position < 10; position++)
-			if(board[position] == ' ')
+			if (board[position] == ' ')
 				return false;
 		return true;
 	}
-	
+
+	// UC13 - Asking for another game
+	public void newGame(Scanner input) {
+		if (isGameOver()) {
+			System.out.println("Do you want to play another game?(Yes/No)");
+			String answer = input.next();
+			if (answer.equalsIgnoreCase("Yes")) {
+				assignEmptySpaceToBoard();
+				System.out.println("The board initally is:");
+				showBoard();
+				char option = chooseSymbol(input);
+				int toss = tossToDecideFirstPlayer();
+				if (toss == HEAD)
+					player = "User";
+				else
+					player = "Computer";
+				checkFreeSpace(input, option);
+			}
+		}
+	}
+
 	public static void main(String[] args) {
 		System.out.println("Welcome to Tic Tac Toe Game");
 		TicTacToe ticTacToe = new TicTacToe();
@@ -249,5 +268,6 @@ public class TicTacToe {
 		else
 			player = "Computer";
 		ticTacToe.checkFreeSpace(input, option);
+		ticTacToe.newGame(input);
 	}
 }
