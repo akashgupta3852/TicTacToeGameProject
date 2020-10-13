@@ -16,21 +16,20 @@ public class TicTacToe {
 	// UC2 - Deciding the symbols of user and computer
 	public char chooseSymbol(Scanner input) {
 		while (true) {
-			System.out.println("Choose the letter X or O");
-			char option = input.next().charAt(0);
-			if (option == 'X') {
+			System.out.println("Choose the letter X or O:");
+			String option = input.next();
+			if (option.equalsIgnoreCase("X")) {
 				System.out.println("X = User");
 				System.out.println("O = Computer");
-				return option;
-			} else if (option == 'O') {
+				return 'X';
+			} else if (option.equalsIgnoreCase("O")) {
 				System.out.println("O = User");
 				System.out.println("X = Computer");
-				return option;
+				return 'O';
 			} else {
 				System.out.println("Sorry, the option: " + option + " is not available.");
 				continue;
 			}
-
 		}
 	}
 
@@ -81,10 +80,11 @@ public class TicTacToe {
 					showBoard();
 					player = "Computer";
 					if (isWinner(option)) {
-						System.out.println("User is winner");
+						showBoard();
+						System.out.println("Computer is winner.");
 						break;
 					}
-					if (isGameOver()) {
+					if (isGameOver(option)) {
 						System.out.println("Game is over.");
 						break;
 					}
@@ -131,54 +131,68 @@ public class TicTacToe {
 	// UC8 - Computer plays
 	private boolean computerMove(char option) {
 		while (true) {
-			int computerPosition = block(option);
-			option = (option == 'X') ? 'O' : 'X';
+			option = changeSymbol(option);
+			int computerPosition = winAndBlockPosition(option);
 			if (computerPosition != 0) {
 				if (board[computerPosition] == ' ') {
 					board[computerPosition] = option;
 					System.out.println("Computer moved at the position: " + computerPosition);
+					showBoard();
+					System.out.println("Computer is winner.");
+					return true;
+				}
+
+			} else {
+				option = changeSymbol(option);
+				computerPosition = winAndBlockPosition(option);
+				option = changeSymbol(option);
+				if (computerPosition != 0) {
+					if (board[computerPosition] == ' ') {
+						board[computerPosition] = option;
+						System.out.println("Computer moved at the position: " + computerPosition);
+						if (isWinner(option)) {
+							showBoard();
+							System.out.println("Computer is winner.");
+							return true;
+						}
+						if (isGameOver(option)) {
+							System.out.println("Game is over.");
+							return true;
+						}
+					}
+				} else {
+					computerPosition = moveCentre();
+					if (computerPosition != 5)
+						board[computerPosition] = option;
+					else if (computerPosition == 5 && board[5] == ' ')
+						board[computerPosition] = option;
+					else {
+						computerPosition = (int) Math.floor(Math.random() * 10) % 9 + 1;
+						if (board[computerPosition] == ' ')
+							board[computerPosition] = option;
+						else {
+							option = changeSymbol(option);
+							continue;
+						}
+					}
+					System.out.println("Computer moved at the position: " + computerPosition);
 					if (isWinner(option)) {
 						showBoard();
-						System.out.println("Computer is winner");
+						System.out.println("Computer is winner.");
 						return true;
 					}
-					if (isGameOver()) {
+					if (isGameOver(option)) {
 						System.out.println("Game is over.");
 						return true;
 					}
 				}
-			} else {
-				computerPosition = moveCentre();
-				if (computerPosition != 5)
-					board[computerPosition] = option;
-				else if (computerPosition == 5)
-					board[computerPosition] = option;
-				else {
-					computerPosition = (int) Math.floor(Math.random() * 10) % 9 + 1;
-					if (board[computerPosition] == ' ')
-						board[computerPosition] = option;
-					else {
-						option = (option == 'X') ? 'O' : 'X';
-						continue;
-					}
-				}
-				System.out.println("Computer moved at the position: " + computerPosition);
-				if (isWinner(option)) {
-					showBoard();
-					System.out.println("Computer is winner");
-					return true;
-				} else if (isGameOver()) {
-					showBoard();
-					System.out.println("Game is over.");
-					return true;
-				}
+				return false;
 			}
-			return false;
 		}
 	}
 
-	// UC9 - Blocking the opponent
-	public int block(char option) {
+	// UC 8 & 9 - Either Win the game or block the opponent
+	public int winAndBlockPosition(char option) {
 		if (board[1] == board[2] && board[2] == option && board[3] ==' ')	return 3;
 		else if (board[2] == board[3] && board[2] == option && board[1] ==' ')	return 1;
 		else if (board[1] == board[3] && board[3] == option && board[2] ==' ')	return 2;
@@ -227,16 +241,22 @@ public class TicTacToe {
 	}
 
 	// UC12 - Checking whether game is over or not
-	public boolean isGameOver() {
-		for (int position = 1; position < 10; position++)
-			if (board[position] == ' ')
-				return false;
+	public boolean isGameOver(char option) {
+		if (isWinner(option))
+			return true;
+		else {
+			for (int position = 1; position < 10; position++)
+				if (board[position] == ' ')
+					return false;
+		}
+
 		return true;
 	}
 
 	// UC13 - Asking for another game
-	public void newGame(Scanner input) {
-		if (isGameOver()) {
+	public void newGame(Scanner input, char lastOption) {
+		lastOption = changeSymbol(lastOption);
+		if (isGameOver(lastOption)) {
 			System.out.println("Do you want to play another game?(Yes/No)");
 			String answer = input.next();
 			if (answer.equalsIgnoreCase("Yes")) {
@@ -250,8 +270,14 @@ public class TicTacToe {
 				else
 					player = "Computer";
 				checkFreeSpace(input, option);
+				newGame(input, option);
 			}
 		}
+	}
+
+	// Changing the symbol X to O or O to X
+	public char changeSymbol(char option) {
+		return (option == 'X') ? 'O' : 'X';
 	}
 
 	public static void main(String[] args) {
@@ -268,6 +294,6 @@ public class TicTacToe {
 		else
 			player = "Computer";
 		ticTacToe.checkFreeSpace(input, option);
-		ticTacToe.newGame(input);
+		ticTacToe.newGame(input, option);
 	}
 }
